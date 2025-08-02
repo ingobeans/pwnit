@@ -35,7 +35,7 @@ if test -f $file; then
 		fi
 	fi
 	# print template
-	echo "${template/\{\{FILE\}\}/"$file"}"
+	echo "${template/\{\{FILE\}\}/"$file"}" > "main.py"
 else
 	echo "file \"$file\" doesn't exist"
 fi
