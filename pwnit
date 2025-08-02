@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+template="from pwn import *
+
+def run():
+    if \"remote\" in sys.argv:
+        if not HOST:
+            log.error(\"no host and port specified\")
+            exit
+        return remote(HOST,PORT)
+    elif \"gdb\" in sys.argv:
+        return gdb.debug(FILE,aslr=False,gdbscript=\"continue\")
+    else:
+        return process(FILE)
+
+HOST = \"\"
+PORT = 0
+FILE = \"{{FILE}}\"
+
+context.terminal = \"kitty\"
+elf = context.binary = ELF(FILE)
+
+p = run()
+"
+
+file=$1
+
+# check that file exists
+if test -f $file; then
+	# if file is local file
+	if ! [[ $file == */* ]]; then
+		# and file doesnt start with "./", then add it
+		if ! [[ $file =~ ^\./.* ]];	then
+			file="./$file"
+		fi
+	fi
+	# print template
+	echo "${template/\{\{FILE\}\}/"$file"}"
+else
+	echo "file \"$file\" doesn't exist"
+fi
+
