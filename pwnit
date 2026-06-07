@@ -9,7 +9,7 @@ def run():
             exit
         return remote(HOST,PORT)
     elif \"gdb\" in sys.argv:
-        return gdb.debug(FILE,aslr=False,gdbscript=\"continue\")
+        return gdb.debug(FILE,aslr=False,gdbscript=\"continue\",env={\"SHELL\":\"/bin/sh\"})
     else:
         return process(FILE)
 
